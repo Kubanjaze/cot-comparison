@@ -1,33 +1,33 @@
 # Phase 72 — Chain of Thought vs Direct Answer on SAR Question
 
-**Version:** 1.0 | **Tier:** Standard | **Date:** 2026-03-27
+**Version:** 1.1 | **Tier:** Standard | **Date:** 2026-03-27
 
 ## Goal
-Compare chain-of-thought (CoT) prompting vs direct-answer prompting on a multi-step SAR reasoning question. Measures whether explicit reasoning steps improve answer quality and accuracy.
+Compare chain-of-thought (CoT) prompting vs direct-answer prompting on a multi-step SAR reasoning question.
 
 CLI: `python main.py --input data/compounds.csv`
 
 Outputs: cot_comparison.json, cot_report.txt
 
 ## Logic
-- Pose a multi-step SAR question: "Which scaffold family should we prioritize for lead optimization, and why?"
-- Direct prompt: "Answer this question concisely."
-- CoT prompt: "Think step by step. First analyze each scaffold's potency. Then compare trends. Then recommend."
-- Score responses on: (1) mentions specific pIC50 values, (2) compares multiple scaffolds, (3) gives clear recommendation, (4) cites evidence for recommendation
-- Report: quality scores, response lengths, token usage comparison
+- Pose a multi-step SAR question: "Which scaffold family should we prioritize?"
+- Direct prompt: "Answer concisely"
+- CoT prompt: "Think step by step: 1) mean pIC50 per family, 2) best/worst, 3) consistency, 4) recommend with evidence"
+- Score on 4 objective criteria: has_pic50_values, compares_scaffolds, has_recommendation, has_evidence
 
 ## Key Concepts
-- Chain-of-thought: explicitly asking model to reason step-by-step
-- Quality scoring: rubric-based evaluation (4 criteria, 0-1 each)
-- Direct vs CoT may differ more on complex multi-step reasoning than simple lookups
-- Token cost: CoT typically uses more output tokens
+- CoT: explicit step-by-step reasoning instructions
+- Quality rubric: 4 binary criteria scored by keyword/pattern matching
+- Token cost comparison: CoT typically more verbose but more thorough
 
-## Verification Checklist
-- [ ] Both prompts produce coherent responses
-- [ ] CoT response shows explicit reasoning steps
-- [ ] Quality rubric applied to both responses
-- [ ] 2 API calls total
+## Results
+| Metric | Value |
+|--------|-------|
+| Direct quality | 4/4 |
+| CoT quality | 4/4 |
+| Direct tokens | 345 output |
+| CoT tokens | 960 output (2.8× more) |
+| Total tokens | in=1997 out=1305 |
+| Est. cost | $0.0068 |
 
-## Risks
-- Subjective quality scoring — rubric must be objective (keyword/pattern matching)
-- Modern models may CoT internally even without explicit prompting
+Key finding: Both achieved 4/4 quality on this task. CoT produced more structured output (tables, step-by-step analysis) at 2.8× token cost. For well-specified questions with clear data, Haiku performs well without CoT. CoT adds thoroughness at the cost of verbosity — useful for complex reasoning but not always necessary.
