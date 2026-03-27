@@ -20,6 +20,18 @@ Outputs: cot_comparison.json, cot_report.txt
 - Quality rubric: 4 binary criteria scored by keyword/pattern matching
 - Token cost comparison: CoT typically more verbose but more thorough
 
+## Verification Checklist
+- [x] Both prompts produce coherent responses
+- [x] CoT response shows explicit step-by-step reasoning
+- [x] Quality rubric applied objectively (keyword/pattern matching, not subjective)
+- [x] Both responses recommend indole scaffold (correct answer)
+- [x] Token cost difference measured (2.8× more for CoT)
+
+## Risks (resolved)
+- Subjective quality scoring — mitigated by using objective keyword/pattern matching rubric
+- Modern models may CoT internally even without explicit prompting — confirmed (both scored 4/4)
+- Small sample (1 question) limits generalizability — acknowledged; finding is directional
+
 ## Results
 | Metric | Value |
 |--------|-------|
